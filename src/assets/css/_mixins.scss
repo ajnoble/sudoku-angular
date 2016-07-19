@@ -1,0 +1,51 @@
+/// Media query mixin for shorthand media queries
+/// ---
+/// @param  {Literal} - Breakpoint to look up in map
+/// @return {Literal}
+@mixin respond-to($name) {
+  // If the key exists in the map
+  @if map-has-key($breakpoints, $name) {
+    // Prints a media query based on the value
+    @media #{inspect(map-get($breakpoints, $name))} {
+      @content;
+    }
+  }
+}
+
+/// Converts `px` to `rem`
+/// ---
+/// @param  {Literal} $size - Value to convert
+/// @return {Literal}
+@function calculate-rem($size) {
+  @return ($size / 16px) * 1rem;
+}
+
+/// Converts the given values into `rem` when using a modern browser and leaves it
+/// as `px` when using IE8.
+/// ---
+/// @author David Walsh
+/// ---
+/// @param  {List} $size - Value to convert
+/// @return {List}
+/// ---
+/// @example
+///   #foo {
+///     margin: units(10px);
+///   }
+@function units($values) {
+  $list: ();
+
+
+  @each $value in $values {
+    $unit: unit($value);
+
+    @if $unit == 'px' {
+      $list: append($list, calculate-rem($value));
+    }
+    @else if unitless($value) {
+      $list: append($list, $value);
+    }
+  }
+
+  @return $list();
+}

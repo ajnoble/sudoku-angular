@@ -1,0 +1,7 @@
+<input
+      class="{{gameCtrl.cellstatus[$parent.rowIndex][$index].alertClass}}"
+      ng-keyup="gameCtrl.makeMove($parent.rowIndex, $index)"
+      ng-disabled="gameCtrl.cellstatus[$parent.rowIndex][$index].disabled"
+      ng-model="gameCtrl.sudokuboard[$parent.rowIndex][$index]"
+      ng-click="clearText($event)"
+      id ="cell-{{$parent.rowIndex}}{{$index}}" type="number" maxlength="1"/>

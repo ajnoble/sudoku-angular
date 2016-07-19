@@ -1,0 +1,35 @@
+table {
+  margin: 0 auto;
+}
+td {
+  height:30px;
+  width:30px;
+  border:1px solid $eggplant;
+  text-align:center;
+}
+td:first-child {
+  border-left:solid $eggplant;
+}
+td:nth-child(3n) {
+  border-right:solid $eggplant;
+}
+tr:first-child {
+  border-top:solid $eggplant;
+}
+tr:nth-child(3n) td {
+  border-bottom:solid $eggplant;
+}
+input {
+  margin: 0;
+  border: 0;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  background-color: $beige;
+  color: $eggplant;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

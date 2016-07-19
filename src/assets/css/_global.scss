@@ -1,0 +1,34 @@
+@font-face {
+  font-family: 'sanfranciscodisplay-regular-webfont';
+  src: url('../fonts/sanfranciscodisplay-regular-webfont.eot'); /* IE9 Compat Modes */
+  src: url('../fonts/sanfranciscodisplay-regular-webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('../fonts/sanfranciscodisplay-regular-webfont.woff2') format('woff2'), /* Super Modern Browsers */
+  url('../fonts/sanfranciscodisplay-regular-webfont.woff') format('woff'), /* Pretty Modern Browsers */
+  url('../fonts/sanfranciscodisplay-regular-webfont.ttf')  format('truetype'), /* Safari, Android, iOS */
+  url('../fonts/sanfranciscodisplay-regular-webfont.svg#sanfranciscodisplay-regular-webfont') format('svg'); /* Legacy iOS */
+}
+body {
+  background-color: $mauve;
+  color: $lilac;
+  font-family: 'sanfranciscodisplay-regular-webfont', Arial, sans-serif;
+  letter-spacing: 1px;
+  margin: 0;
+}
+a{
+  text-decoration: none;
+  &:hover{
+    text-decoration: underline;
+  }
+}
+h1{
+  color: $eggplant;
+  margin-bottom: 0;
+}
+small{
+  margin-bottom: 20px;
+  display: block;
+}
+.main{
+  display: block;
+  padding-top: 8px;
+}

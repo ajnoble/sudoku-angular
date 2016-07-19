@@ -1,0 +1,7 @@
+<table>
+    <tr ng-repeat="row in gameCtrl.sudokuboard track by $index" ng-init="rowIndex = $index" >
+        <td ng-repeat="col in row track by $index" >
+            <cell/>
+        </td>
+    </tr>
+</table>
