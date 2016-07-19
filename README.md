@@ -11,3 +11,10 @@ npm install
 ```
 gulp
 ```
+## THINGS I COULD HAVE DONE
+- Unit testing
+- Get rid of bootstrap
+- A11y testing
+- Device testing
+- Convert to typescript/angular implementation
+- Performance testing
