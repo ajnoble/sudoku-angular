@@ -12,8 +12,7 @@ npm install
 gulp
 ```
 
-## Play!
-[a link](http://localhost:8080)
+[PLAY!](http://localhost:8080)
 
 
 ## THINGS I COULD HAVE DONE
