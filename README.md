@@ -11,6 +11,11 @@ npm install
 ```
 gulp
 ```
+
+## Play!
+[a link](http://localhost:8080)
+
+
 ## THINGS I COULD HAVE DONE
 - Unit testing
 - Get rid of bootstrap
