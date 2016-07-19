@@ -18,6 +18,7 @@ gulp
 ## THINGS I COULD HAVE DONE
 - Unit testing
 - Get rid of bootstrap
+- Used webpack/browserify
 - A11y testing
 - Device testing
 - Convert to typescript/angular implementation
