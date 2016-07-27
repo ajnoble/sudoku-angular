@@ -1,4 +1,4 @@
-angular.module('GameboardDirective', [])
+angular.module('GameboardDirective', ['CellDirective'])
 .directive('gameboard', function(){
   return {
     restrict: "E",
