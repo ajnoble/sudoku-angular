@@ -1,4 +1,4 @@
-angular.module('CellDirective', [])
+angular.module('Game')
 .directive('cell', function(){
   return {
     restrict: "E",

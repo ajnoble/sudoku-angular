@@ -1,4 +1,4 @@
-function GameCtrl(GameModel, UserFeedbackService, $state){
+function GameCtrl(GameModel, UserFeedbackService, CellService, $state){
   //PRIVATE VARS
   var gameCtrl = this;
   var cachedBoard = [];
@@ -11,7 +11,7 @@ function GameCtrl(GameModel, UserFeedbackService, $state){
   //PUBLIC VARS
   gameCtrl.loaded = false;
   gameCtrl.sudokuboard = [];
-  gameCtrl.cellstatus = [];
+  gameCtrl.cellstatus = CellService;
   gameCtrl.userFeedback = UserFeedbackService;
 
   //PUBLIC METHODS
@@ -50,27 +50,7 @@ function GameCtrl(GameModel, UserFeedbackService, $state){
     return cachedBoard;
   }
 
-  /**
-  * setupCellStatus method used for setting up the cell status 2D array that contains object for each cell
-  * @param {object} result - json data from sudoku api
-  * @returns {array}
-  */
-  function setupCellStatus(result){
-    var data = result;
-    gameCtrl.cellstatus = [];
-    for(var i = 0; i<data.length; i++){
-      gameCtrl.cellstatus[i] = [];
-      for(var j = 0; j<data[i].length; j++){
-        gameCtrl.cellstatus[i][j] = {
-          disabled: false
-        };
-        if(data[i][j] !== 0){
-          gameCtrl.cellstatus[i][j].disabled = true;
-        }
-      }
-    }
-    return gameCtrl.cellstatus;
-  }
+
 
   /**
   * newGame method used for initialzing a new game
@@ -85,31 +65,13 @@ function GameCtrl(GameModel, UserFeedbackService, $state){
           UserFeedbackService.updateUserFeedback('Something\'s wrong...'+result.status, alert.danger)
           return;
         }
-        setupCellStatus(result.data.sudokuBoard);
+        CellService.setupCellStatus(result.data.sudokuBoard);
         removeZerosFromBoard(result.data.sudokuBoard);
         UserFeedbackService.updateUserFeedback('', '')
       });
   }
 
-  /**
-  * updateCellStatus method used for updating the cell staus once a move has been made
-  * @param {number} row - cell row number
-  * @param {number} col - cell col number
-  * @param {string} alertType - alert box css class
-  * @returns {array}
-  */
-  function updateCellStatus(row, col, alertType){
-    gameCtrl.cellstatus[row][col].alertClass = alertType;
-    return gameCtrl.cellstatus;
-  }
 
-  /**
-  * updateCellStatus method used for updating the cached game board
-  * @param {number} row - cell row number
-  * @param {number} col - cell col number
-  * @param {number} val - new cell value
-  * @returns {array}
-  */
   function updateCachedBoard(row, col, val){
     cachedBoard[row][col] = val;
     return cachedBoard;
@@ -146,7 +108,7 @@ function GameCtrl(GameModel, UserFeedbackService, $state){
     }
     if(val === null || val > 10 || val < 0){
       UserFeedbackService.updateUserFeedback('Only numbers please!', alert.danger);
-      updateCellStatus(row, col, alert.danger);
+      CellService.updateCellStatus(row, col, alert.danger);
       return;
     }
 
@@ -164,7 +126,7 @@ function GameCtrl(GameModel, UserFeedbackService, $state){
         $state.go('solved');
       }
       //move was good
-      updateCellStatus(row, col, alert.success);
+      CellService.updateCellStatus(row, col, alert.success);
       updateCachedBoard(row, col, val);
       UserFeedbackService.updateUserFeedback('Good move ;)', alert.success);
     }, function(result){
@@ -174,7 +136,7 @@ function GameCtrl(GameModel, UserFeedbackService, $state){
         return;
       }
       //move returned a conflict
-      updateCellStatus(row, col, alert.danger);
+      CellService.updateCellStatus(row, col, alert.danger);
       updateCachedBoard(row, col, val);
       UserFeedbackService.updateUserFeedback(result.statusText+'! Check out row: '+(result.data.conflictRow+1)+' and coloumn: '+(result.data.conflictColumn+1), alert.danger);
     });

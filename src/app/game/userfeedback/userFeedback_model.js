@@ -1,12 +1,12 @@
 function UserFeedbackService(){
 
-  var userfeedback = {
+  var userfeedbackService = {
     txt : '',
     alert : '',
     updateUserFeedback: updateUserFeedback
   };
 
-  return userfeedback;
+  return userfeedbackService;
 
   /**
   * updateUserFeedback method used for updating the user feedback alert box in the view
@@ -15,9 +15,9 @@ function UserFeedbackService(){
   * @returns {object}
   */
   function updateUserFeedback(alert, alertType){
-    userfeedback.txt = alert;
-    userfeedback.alert = alertType;
-    return userfeedback;
+    userfeedbackService.txt = alert;
+    userfeedbackService.alert = alertType;
+    return userfeedbackService;
   }
 
 }
