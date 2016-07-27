@@ -195,4 +195,4 @@ function GameCtrl(GameModel, $state){
   }
 }
 
-angular.module('Game', ['ui.router']).controller('GameCtrl', GameCtrl);
+angular.module('Game').controller('GameCtrl', GameCtrl);

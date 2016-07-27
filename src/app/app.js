@@ -1,5 +1,4 @@
-angular.module('Sudoku', [
-    'Game',
+angular.module('Game', [
     'ui.router',
     'GameboardDirective',
     'CellDirective',

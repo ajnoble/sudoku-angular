@@ -19,6 +19,5 @@ function GameModel($http){
       );
   };
 }
-GameModel.$inject = ['$http'];
 
 angular.module('Game').service('GameModel', GameModel);
