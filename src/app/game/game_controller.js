@@ -33,7 +33,7 @@ function GameCtrl(GameModel, UserFeedbackService, GameboardService, CellService,
           UserFeedbackService.updateUserFeedback('Something\'s wrong...'+result.status, alert.danger)
           return;
         }
-        CellService.setupCellStatus(result.data.sudokuBoard);
+        gameCtrl.cellstatus = CellService.setupCellStatus(result.data.sudokuBoard);
         gameCtrl.sudokuboard = GameboardService.removeZerosFromBoard(result.data.sudokuBoard);
         UserFeedbackService.updateUserFeedback('', '');
 
