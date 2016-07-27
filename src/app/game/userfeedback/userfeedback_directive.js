@@ -1,8 +1,8 @@
-angular.module('UserFeedbackDirective', [])
-.directive('userfeedback', function(){
+angular.module('Game')
+.directive('userFeedback', function(){
   return {
     restrict: "E",
     replace: true,
-    templateUrl: "./app/game/userfeedback/userfeedback.tmpl.html"
+    templateUrl: "./app/game/userFeedback/userFeedback.tmpl.html"
   };
 });

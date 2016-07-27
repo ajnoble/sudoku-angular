@@ -1,4 +1,4 @@
-function GameCtrl(GameModel, $state){
+function GameCtrl(GameModel, UserFeedbackService, $state){
   //PRIVATE VARS
   var gameCtrl = this;
   var cachedBoard = [];
@@ -12,10 +12,7 @@ function GameCtrl(GameModel, $state){
   gameCtrl.loaded = false;
   gameCtrl.sudokuboard = [];
   gameCtrl.cellstatus = [];
-  gameCtrl.userFeedback = {
-    txt: 'Loading Board...',
-    alert: alert.info
-  };
+  gameCtrl.userFeedback = UserFeedbackService;
 
   //PUBLIC METHODS
   gameCtrl.makeMove = makeMove;
@@ -80,29 +77,18 @@ function GameCtrl(GameModel, $state){
   * @returns {void}
   */
   function newGame(){
+    UserFeedbackService.updateUserFeedback('Loading Board...', alert.info)
     //get gameboard
     GameModel.getGameboard()
       .then(function(result){
         if(result.status !== 200){
-          updateUserFeedback('Something\'s wrong...'+result.status, alert.danger)
+          UserFeedbackService.updateUserFeedback('Something\'s wrong...'+result.status, alert.danger)
           return;
         }
         setupCellStatus(result.data.sudokuBoard);
         removeZerosFromBoard(result.data.sudokuBoard);
-        updateUserFeedback('', '')
+        UserFeedbackService.updateUserFeedback('', '')
       });
-  }
-
-  /**
-  * updateUserFeedback method used for updating the user feedback alert box in the view
-  * @param {string} alert - Text that will appear in the alert box
-  * @param {string} alertType - alert box css class
-  * @returns {object}
-  */
-  function updateUserFeedback(alert, alertType){
-    gameCtrl.userFeedback.txt = alert;
-    gameCtrl.userFeedback.alert = alertType;
-    return gameCtrl.userFeedback;
   }
 
   /**
@@ -159,7 +145,7 @@ function GameCtrl(GameModel, $state){
       return;
     }
     if(val === null || val > 10 || val < 0){
-      updateUserFeedback('Only numbers please!', alert.danger);
+      UserFeedbackService.updateUserFeedback('Only numbers please!', alert.danger);
       updateCellStatus(row, col, alert.danger);
       return;
     }
@@ -168,7 +154,7 @@ function GameCtrl(GameModel, $state){
     var data = prepJsonObject(row, col, val);
 
     //let the user know we are checking the move
-    updateUserFeedback('Checking move...', alert.info);
+    UserFeedbackService.updateUserFeedback('Checking move...', alert.info);
 
     //put the data
     GameModel.putSudokuBoard(data).then(function(result){
@@ -180,17 +166,17 @@ function GameCtrl(GameModel, $state){
       //move was good
       updateCellStatus(row, col, alert.success);
       updateCachedBoard(row, col, val);
-      updateUserFeedback('Good move ;)', alert.success);
+      UserFeedbackService.updateUserFeedback('Good move ;)', alert.success);
     }, function(result){
       //api didnt return a 409 so something must be wrong
       if(result.status !== 409){
-        updateUserFeedback('Something\'s wrong...'+result.status, alert.danger)
+        UserFeedbackService.updateUserFeedback('Something\'s wrong...'+result.status, alert.danger)
         return;
       }
       //move returned a conflict
       updateCellStatus(row, col, alert.danger);
       updateCachedBoard(row, col, val);
-      updateUserFeedback(result.statusText+'! Check out row: '+(result.data.conflictRow+1)+' and coloumn: '+(result.data.conflictColumn+1), alert.danger);
+      UserFeedbackService.updateUserFeedback(result.statusText+'! Check out row: '+(result.data.conflictRow+1)+' and coloumn: '+(result.data.conflictColumn+1), alert.danger);
     });
   }
 }

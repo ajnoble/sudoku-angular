@@ -1,7 +1,6 @@
 angular.module('Game', [
     'ui.router',
-    'GameboardDirective',
-    'UserFeedbackDirective'
+    'GameboardDirective'
 ]).config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
         .state('playing', {
