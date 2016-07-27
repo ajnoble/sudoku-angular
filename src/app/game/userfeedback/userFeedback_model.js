@@ -1,8 +1,8 @@
 function UserFeedbackService(){
 
   var userfeedbackService = {
-    txt : '',
-    alert : '',
+    txt : 'Loading...',
+    alert : 'alert-info',
     updateUserFeedback: updateUserFeedback
   };
 

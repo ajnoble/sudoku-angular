@@ -1,7 +1,6 @@
-function GameCtrl(GameModel, UserFeedbackService, CellService, $state){
+function GameCtrl(GameModel, UserFeedbackService, GameboardService, CellService, $state){
   //PRIVATE VARS
   var gameCtrl = this;
-  var cachedBoard = [];
   var alert = {
     danger : 'alert-danger',
     success : 'alert-success',
@@ -10,7 +9,7 @@ function GameCtrl(GameModel, UserFeedbackService, CellService, $state){
 
   //PUBLIC VARS
   gameCtrl.loaded = false;
-  gameCtrl.sudokuboard = [];
+  gameCtrl.sudokuboard = GameboardService.sudokuboard;
   gameCtrl.cellstatus = CellService;
   gameCtrl.userFeedback = UserFeedbackService;
 
@@ -23,41 +22,10 @@ function GameCtrl(GameModel, UserFeedbackService, CellService, $state){
   //GameCtrl METHODS
 
   /**
-  * removeZerosFromBoard method used for removing 0's from the initial sudoku board
-  * @param {object} result - json data from sudoku api
-  * @returns {array} - board array with 0's removed
-  */
-  function removeZerosFromBoard(result){
-    var noZerosBoard = result;
-    for(var i = 0; i<noZerosBoard.length; i++){
-      for(var j = 0; j<noZerosBoard[i].length; j++){
-        noZerosBoard[i][j] = (noZerosBoard[i][j] === 0) ? '' : noZerosBoard[i][j];
-      }
-    }
-    gameCtrl.sudokuboard = noZerosBoard
-    //cache the board for later use
-    cacheBoard();
-    return noZerosBoard;
-
-  }
-
-  /**
-  * cacheBoard method used for storing original state of the board after a user has inputed new values
-  * @returns {array} - board array
-  */
-  function cacheBoard(){
-    cachedBoard = angular.copy(gameCtrl.sudokuboard);
-    return cachedBoard;
-  }
-
-
-
-  /**
   * newGame method used for initialzing a new game
   * @returns {void}
   */
   function newGame(){
-    UserFeedbackService.updateUserFeedback('Loading Board...', alert.info)
     //get gameboard
     GameModel.getGameboard()
       .then(function(result){
@@ -66,15 +34,10 @@ function GameCtrl(GameModel, UserFeedbackService, CellService, $state){
           return;
         }
         CellService.setupCellStatus(result.data.sudokuBoard);
-        removeZerosFromBoard(result.data.sudokuBoard);
-        UserFeedbackService.updateUserFeedback('', '')
+        gameCtrl.sudokuboard = GameboardService.removeZerosFromBoard(result.data.sudokuBoard);
+        UserFeedbackService.updateUserFeedback('', '');
+
       });
-  }
-
-
-  function updateCachedBoard(row, col, val){
-    cachedBoard[row][col] = val;
-    return cachedBoard;
   }
 
   /**
@@ -86,7 +49,7 @@ function GameCtrl(GameModel, UserFeedbackService, CellService, $state){
   */
   function prepJsonObject(moveRow, moveColumn, moveValue){
     var data = {
-      sudokuBoard : cachedBoard,
+      sudokuBoard : GameboardService.cachedBoard,
       moveRow : moveRow,
       moveColumn : moveColumn,
       moveValue : moveValue
@@ -102,13 +65,9 @@ function GameCtrl(GameModel, UserFeedbackService, CellService, $state){
   */
   function makeMove(row, col) {
     var val = gameCtrl.sudokuboard[row][col];
-    //is the move valid
-    if(val === ''){
-      return;
-    }
-    if(val === null || val > 10 || val < 0){
-      UserFeedbackService.updateUserFeedback('Only numbers please!', alert.danger);
-      CellService.updateCellStatus(row, col, alert.danger);
+    //is there a value? if not upadte the cell status and return
+    if(val === '' || val === null){
+      gameCtrl.cellstatus = CellService.updateCellStatus(row, col, '');
       return;
     }
 
@@ -126,18 +85,19 @@ function GameCtrl(GameModel, UserFeedbackService, CellService, $state){
         $state.go('solved');
       }
       //move was good
-      CellService.updateCellStatus(row, col, alert.success);
-      updateCachedBoard(row, col, val);
+      gameCtrl.cellstatus = CellService.updateCellStatus(row, col, alert.success);
+      GameboardService.updateCachedBoard(row, col, val);
       UserFeedbackService.updateUserFeedback('Good move ;)', alert.success);
     }, function(result){
       //api didnt return a 409 so something must be wrong
       if(result.status !== 409){
-        UserFeedbackService.updateUserFeedback('Something\'s wrong...'+result.status, alert.danger)
+        UserFeedbackService.updateUserFeedback('Something\'s wrong...'+result.status, alert.danger);
+        gameCtrl.cellstatus = CellService.updateCellStatus(row, col, alert.danger);
         return;
       }
       //move returned a conflict
-      CellService.updateCellStatus(row, col, alert.danger);
-      updateCachedBoard(row, col, val);
+      gameCtrl.cellstatus = CellService.updateCellStatus(row, col, alert.danger);
+      GameboardService.updateCachedBoard(row, col, val);
       UserFeedbackService.updateUserFeedback(result.statusText+'! Check out row: '+(result.data.conflictRow+1)+' and coloumn: '+(result.data.conflictColumn+1), alert.danger);
     });
   }

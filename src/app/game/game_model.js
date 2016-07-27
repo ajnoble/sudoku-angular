@@ -7,6 +7,7 @@ function GameModel($http){
       return  $http.get(URL);
     },
     putSudokuBoard: function(data){
+      console.log(data);
       return $http.put(URL, data).then(
           function(result){
               return result;
@@ -14,7 +15,7 @@ function GameModel($http){
       );
     }
   };
-  
+
   return gameModel;
 }
 
