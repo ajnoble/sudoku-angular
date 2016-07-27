@@ -73,7 +73,7 @@ gulp.task('minify-copy-app-js', function () {
   return gulp.src(files.app_files.js)
     .pipe(concat('sudoku.js'))
     .pipe(ngAnnotate())
-    //.pipe(uglify())
+    .pipe(uglify())
     .pipe(gulp.dest('./build/app'));
 });
 
