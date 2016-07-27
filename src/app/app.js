@@ -6,7 +6,9 @@ angular.module('Game', [
     $stateProvider
         .state('playing', {
             url: '/',
-            templateUrl: './app/game/templates/playing.html'
+            templateUrl: './app/game/templates/playing.html',
+            controller: 'GameCtrl',
+            controllerAs: 'gameCtrl'
         })
         .state('solved', {
             url: '/solved',
