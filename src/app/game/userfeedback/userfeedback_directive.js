@@ -3,9 +3,6 @@ angular.module('UserFeedbackDirective', [])
   return {
     restrict: "E",
     replace: true,
-    templateUrl: "./app/game/userfeedback/userfeedback.tmpl.html",
-    link: function(){
-      console.log('here!');
-    }
+    templateUrl: "./app/game/userfeedback/userfeedback.tmpl.html"
   };
 });
