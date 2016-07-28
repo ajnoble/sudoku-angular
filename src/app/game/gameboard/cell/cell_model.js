@@ -9,19 +9,18 @@ function CellService() {
     return cellService;
     /**
      * setupCellStatus method used for setting up the cell status 2D array that contains object for each cell
-     * @param {object} result - json data from sudoku api
+     * @param {object} sudokuBoardFromServer - json data from sudoku api
      * @returns {array}
      */
-    function setupCellStatus(result) {
-        var data = result;
+    function setupCellStatus(sudokuBoardFromServer) {
         cellService.cellstatus = [];
-        for (var i = 0; i < data.length; i++) {
+        for (var i = 0; i < sudokuBoardFromServer.length; i++) {
             cellService.cellstatus[i] = [];
-            for (var j = 0; j < data[i].length; j++) {
+            for (var j = 0; j < sudokuBoardFromServer[i].length; j++) {
                 cellService.cellstatus[i][j] = {
                     disabled: false
                 };
-                if (data[i][j] !== 0) {
+                if (sudokuBoardFromServer[i][j] !== 0) {
                     cellService.cellstatus[i][j].disabled = true;
                 }
             }
