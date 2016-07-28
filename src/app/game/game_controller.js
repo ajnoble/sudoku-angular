@@ -8,7 +8,6 @@ function GameCtrl(GameModel, UserFeedbackService, GameboardService, CellService,
   };
 
   //PUBLIC VARS
-  gameCtrl.loaded = false;
   gameCtrl.sudokuboard = GameboardService.sudokuboard;
   gameCtrl.cellstatus = CellService;
   gameCtrl.userFeedback = UserFeedbackService;
@@ -40,22 +39,7 @@ function GameCtrl(GameModel, UserFeedbackService, GameboardService, CellService,
       });
   }
 
-  /**
-  * prepJsonObject method used for formatting the json object prior to put request
-  * @param {number} moveRow - cell row number
-  * @param {number} moveColumn - cell col number
-  * @param {number} moveValue - cell value
-  * @returns {object}
-  */
-  function prepJsonObject(moveRow, moveColumn, moveValue){
-    var data = {
-      sudokuBoard : GameboardService.cachedBoard,
-      moveRow : moveRow,
-      moveColumn : moveColumn,
-      moveValue : moveValue
-    }
-    return data;
-  }
+
 
   /**
   * makeMove method used for validating move, prepping data, and putting data
@@ -71,14 +55,11 @@ function GameCtrl(GameModel, UserFeedbackService, GameboardService, CellService,
       return;
     }
 
-    //Move is valid lets prep the data
-    var data = prepJsonObject(row, col, val);
-
     //let the user know we are checking the move
     UserFeedbackService.updateUserFeedback('Checking move...', alert.info);
 
     //put the data
-    GameModel.putSudokuBoard(data).then(function(result){
+    GameModel.putSudokuBoard(row, col, val).then(function(result){
       //SUCCESS
       //game over?
       if(result.data.gameOver === true){
